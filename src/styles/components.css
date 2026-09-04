@@ -1,0 +1,470 @@
+/* ==========================================================================
+   SHARED COMPONENTS
+   ========================================================================== */
+
+/* --- Buttons ------------------------------------------------------------ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.95rem 1.6rem;
+  border-radius: 2px;
+  font-family: var(--font-sans);
+  font-size: var(--step-small);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  text-align: left;
+  border: 1px solid transparent;
+  transition: background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  /* Comfortable tap target on touch devices. */
+  min-height: 3rem;
+}
+
+.btn__icon {
+  flex: none;
+  width: 0.7em;
+  height: 0.7em;
+  transition: transform var(--dur) var(--ease);
+}
+
+.btn--primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn--primary:hover {
+  background: var(--accent-strong);
+}
+
+.btn--primary:hover .btn__icon {
+  transform: translate(2px, -2px);
+}
+
+.btn--secondary {
+  border-color: var(--line-strong);
+  color: var(--ink);
+  background: transparent;
+}
+
+.btn--secondary:hover {
+  border-color: var(--ink);
+  background: transparent;
+}
+
+.btn--secondary:hover .btn__icon {
+  transform: translateY(2px);
+}
+
+/* On dark surfaces */
+.section--ink .btn--primary,
+.btn--primary.on-ink {
+  background: var(--on-ink);
+  color: var(--ink);
+}
+
+.section--ink .btn--primary:hover,
+.btn--primary.on-ink:hover {
+  background: var(--accent-on-ink);
+  color: var(--ink);
+}
+
+.section--ink .btn--secondary,
+.btn--secondary.on-ink {
+  border-color: var(--line-on-ink-strong);
+  color: var(--on-ink);
+}
+
+.section--ink .btn--secondary:hover,
+.btn--secondary.on-ink:hover {
+  border-color: var(--on-ink);
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+  align-items: center;
+}
+
+/* --- Inline text link --------------------------------------------------- */
+.link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 5px;
+  /* Vertical padding grows the touch target without shifting the underline. */
+  padding-block: 0.9rem;
+  transition: text-decoration-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.link:hover {
+  color: var(--accent-strong);
+  text-decoration-color: var(--accent-strong);
+}
+
+.section--ink .link {
+  text-decoration-color: var(--line-on-ink-strong);
+}
+
+.section--ink .link:hover {
+  color: var(--accent-on-ink);
+  text-decoration-color: var(--accent-on-ink);
+}
+
+/* --- Wordmark ----------------------------------------------------------- */
+.wordmark {
+  display: inline-block;
+  padding-block: 0.9rem;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--ink);
+  line-height: 1;
+  white-space: nowrap;
+  transition: color var(--dur) var(--ease);
+}
+
+.wordmark:hover {
+  color: var(--accent-strong);
+}
+
+/* --- Header -------------------------------------------------------------
+   The full horizontal navigation needs roughly 1,200px to sit comfortably
+   next to the wordmark and the call to action; below that the accessible
+   panel menu takes over.
+   ------------------------------------------------------------------------ */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.header[data-scrolled="true"] {
+  border-bottom-color: var(--line);
+}
+
+.header[data-open="true"] {
+  background: var(--paper);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.header__inner {
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+}
+
+.header__end {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2vw, 1.75rem);
+}
+
+.header__nav {
+  display: none;
+}
+
+.header__cta {
+  display: none;
+}
+
+.header__link {
+  font-size: 0.8125rem;
+  font-weight: 450;
+  letter-spacing: 0.015em;
+  color: var(--ink-soft);
+  position: relative;
+  padding-block: 0.35rem;
+  transition: color var(--dur) var(--ease);
+  white-space: nowrap;
+}
+
+.header__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur) var(--ease);
+}
+
+.header__link:hover {
+  color: var(--ink);
+}
+
+.header__link:hover::after {
+  transform: scaleX(1);
+}
+
+/* The booking CTA appears as soon as there is room beside the menu button,
+   so it is never more than one tap away above the smallest screens. */
+@media (min-width: 48em) {
+  .header__cta {
+    display: inline-flex;
+    padding: 0.7rem 1.15rem;
+    min-height: 2.75rem;
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 75em) {
+  .header__nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.25rem, 2.2vw, 2.25rem);
+  }
+}
+
+/* --- Mobile menu -------------------------------------------------------- */
+.header__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: var(--step-label);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding: 0.75rem 0;
+  /* Extends the tap target without shifting the layout. */
+  margin-inline-end: -0.25rem;
+  padding-inline-end: 0.25rem;
+  min-height: 3rem;
+}
+
+.header__toggle-bars {
+  position: relative;
+  width: 20px;
+  height: 10px;
+  flex: none;
+}
+
+.header__toggle-bars span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform var(--dur) var(--ease), opacity var(--dur-fast) var(--ease);
+}
+
+.header__toggle-bars span:first-child {
+  top: 0;
+}
+.header__toggle-bars span:last-child {
+  bottom: 0;
+}
+
+.header__toggle[aria-expanded="true"] .header__toggle-bars span:first-child {
+  transform: translateY(4.25px) rotate(45deg);
+}
+
+.header__toggle[aria-expanded="true"] .header__toggle-bars span:last-child {
+  transform: translateY(-4.25px) rotate(-45deg);
+}
+
+@media (min-width: 75em) {
+  .header__toggle {
+    display: none;
+  }
+}
+
+.menu {
+  position: fixed;
+  inset: var(--header-h) 0 0;
+  z-index: 99;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-l) var(--gutter) var(--space-2xl);
+  animation: menu-in var(--dur) var(--ease) both;
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.menu__list {
+  border-top: 1px solid var(--line);
+}
+
+.menu__item {
+  border-bottom: 1px solid var(--line);
+}
+
+.menu__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  padding: 1.1rem 0;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+  min-height: 3.25rem;
+}
+
+.menu__index {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--ink-muted);
+}
+
+.menu__foot {
+  margin-top: auto;
+  padding-top: var(--space-xl);
+}
+
+.menu__foot .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.menu__email {
+  display: flex;
+  align-items: center;
+  min-height: 3rem;
+  margin-top: var(--space-s);
+  font-size: var(--step-small);
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+}
+
+.menu__meta {
+  margin-top: var(--space-s);
+  font-size: var(--step-small);
+  color: var(--ink-muted);
+  line-height: 1.7;
+}
+
+@media (min-width: 75em) {
+  .menu {
+    display: none;
+  }
+}
+
+/* --- Footer ------------------------------------------------------------- */
+.footer {
+  background: var(--ink-bg);
+  color: var(--on-ink-muted);
+  padding-block: clamp(3rem, 2rem + 4vw, 5rem);
+}
+
+.footer__top {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+@media (min-width: 48em) {
+  .footer__top {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: var(--space-2xl);
+  }
+}
+
+.footer .wordmark {
+  color: var(--on-ink);
+  font-size: 1.0625rem;
+  padding-block: 0;
+}
+
+.footer__descriptor {
+  margin-top: var(--space-xs);
+  font-size: var(--step-small);
+  letter-spacing: 0.02em;
+  color: var(--on-ink-muted);
+}
+
+.footer__links {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--step-small);
+}
+
+@media (min-width: 48em) {
+  .footer__links {
+    align-items: flex-end;
+  }
+}
+
+.footer__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  width: fit-content;
+  color: var(--on-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--line-on-ink);
+  text-underline-offset: 5px;
+  transition: text-decoration-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.footer__links a:hover {
+  color: var(--accent-on-ink);
+  text-decoration-color: var(--accent-on-ink);
+}
+
+.footer__bottom {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  padding-top: var(--space-m);
+  border-top: 1px solid var(--line-on-ink);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs) var(--space-m);
+  justify-content: space-between;
+  font-size: 0.8125rem;
+  color: var(--on-ink-muted);
+}
+
+/* --- Scroll reveal (progressive enhancement) ---------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--dur-slow) var(--ease),
+    transform var(--dur-slow) var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.is-visible,
+/* Keyboard focus must never land on something still faded out. */
+.reveal:focus-within {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,0 +1,82 @@
+/* ==========================================================================
+   DESIGN TOKENS
+   The whole visual system is defined here: colour, type scale, spacing,
+   rhythm and motion. Sections compose these tokens; they do not invent
+   their own values.
+   ========================================================================== */
+
+:root {
+  /* --- Surfaces & ink (warm neutral palette) --------------------------- */
+  --paper: #fbf9f5; /* warm white — default page surface */
+  --paper-sunk: #f3efe8; /* stone — recessed / alternate sections */
+  --paper-raised: #ffffff;
+
+  --ink: #171613; /* near-black, warm */
+  --ink-soft: #3a3833;
+  --ink-muted: #6b675e; /* 5.4:1 on --paper */
+
+  --line: #e3ddd2; /* hairline rules */
+  --line-strong: #cfc7b8;
+
+  /* --- Dark surfaces ---------------------------------------------------- */
+  --ink-bg: #171613;
+  --on-ink: #f3efe8;
+  --on-ink-muted: #9c9789; /* 6.3:1 on --ink-bg */
+  --line-on-ink: rgba(243, 239, 232, 0.16);
+  --line-on-ink-strong: rgba(243, 239, 232, 0.32);
+
+  /* --- Accent (used sparingly: rules, markers, the V mark) -------------- */
+  --accent: #a85b33; /* graphic / large-text use */
+  --accent-strong: #8a4526; /* 6.7:1 on --paper — safe for small text */
+  --accent-on-ink: #c9825c; /* 6.0:1 on --ink-bg */
+
+  /* --- Type families (bound by next/font in layout.tsx) ------------------ */
+  --font-display: var(--font-newsreader), ui-serif, Georgia, "Times New Roman",
+    serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Helvetica, Arial, sans-serif;
+
+  /* --- Fluid type scale -------------------------------------------------- */
+  --step-display: clamp(2rem, 0.95rem + 4.6vw, 5rem);
+  --step-1: clamp(2rem, 1.24rem + 3.3vw, 3.75rem);
+  --step-2: clamp(1.5rem, 1.16rem + 1.5vw, 2.375rem);
+  --step-3: clamp(1.25rem, 1.11rem + 0.62vw, 1.625rem);
+  --step-lead: clamp(1.0625rem, 0.99rem + 0.36vw, 1.3125rem);
+  --step-body: clamp(1rem, 0.97rem + 0.14vw, 1.0938rem);
+  --step-small: 0.875rem;
+  --step-label: 0.75rem;
+
+  /* --- Spacing ----------------------------------------------------------- */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-s: 1rem;
+  --space-m: 1.5rem;
+  --space-l: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+
+  /* Vertical rhythm for major sections */
+  --section-y: clamp(4.5rem, 2.8rem + 7vw, 9rem);
+  --section-y-lg: clamp(5.5rem, 3rem + 9vw, 11rem);
+
+  /* --- Layout ------------------------------------------------------------ */
+  --container: 78rem; /* 1248px */
+  --container-narrow: 58rem;
+  --gutter: clamp(1.25rem, 0.6rem + 2.8vw, 3.5rem);
+  --measure: 58ch;
+  --header-h: 4.5rem;
+
+  /* --- Motion ------------------------------------------------------------ */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-fast: 160ms;
+  --dur: 260ms;
+  --dur-slow: 720ms;
+}
+
+@media (min-width: 48em) {
+  :root {
+    --header-h: 5.25rem;
+  }
+}

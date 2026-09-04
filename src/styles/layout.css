@@ -1,0 +1,172 @@
+/* ==========================================================================
+   LAYOUT PRIMITIVES
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: calc(var(--container) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.container--narrow {
+  max-width: calc(var(--container-narrow) + var(--gutter) * 2);
+}
+
+.section {
+  padding-block: var(--section-y);
+  position: relative;
+}
+
+.section--lg {
+  padding-block: var(--section-y-lg);
+}
+
+.section--sunk {
+  background: var(--paper-sunk);
+}
+
+.section--ink {
+  background: var(--ink-bg);
+  color: var(--on-ink);
+}
+
+.section--ink h1,
+.section--ink h2,
+.section--ink h3,
+.section--ink h4 {
+  color: var(--on-ink);
+}
+
+/* A hairline that spans the content column, used to separate sections
+   that share the same background. */
+.section--ruled {
+  border-top: 1px solid var(--line);
+}
+
+.section--ruled-inset::before {
+  content: "";
+  position: absolute;
+  inset-inline: var(--gutter);
+  top: 0;
+  height: 1px;
+  background: var(--line);
+}
+
+@media (min-width: 60em) {
+  .section--ruled-inset::before {
+    inset-inline: max(var(--gutter), calc((100% - var(--container)) / 2));
+  }
+}
+
+/* --- Editorial two-column: sticky heading left, body right -------------- */
+.editorial {
+  display: grid;
+  gap: var(--space-l);
+}
+
+@media (min-width: 60em) {
+  .editorial {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: start;
+  }
+
+}
+
+.prose > * + * {
+  margin-top: 1.15em;
+}
+
+.prose p {
+  max-width: var(--measure);
+  color: var(--ink-soft);
+  font-size: var(--step-lead);
+  line-height: 1.62;
+}
+
+.section--ink .prose p {
+  color: var(--on-ink-muted);
+}
+
+.prose--tight p {
+  font-size: var(--step-body);
+  line-height: 1.68;
+}
+
+/* --- Small caps label --------------------------------------------------- */
+.eyebrow {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: var(--step-label);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: var(--space-m);
+}
+
+.eyebrow--accent {
+  color: var(--accent-strong);
+}
+
+.section--ink .eyebrow {
+  color: var(--on-ink-muted);
+}
+
+.section--ink .eyebrow--accent {
+  color: var(--accent-on-ink);
+}
+
+/* A numbered eyebrow with a leading rule. */
+.eyebrow--ruled {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+}
+
+.eyebrow--ruled::before {
+  content: "";
+  width: 2rem;
+  height: 1px;
+  background: var(--accent);
+  flex: none;
+}
+
+/* Headline whose sentences each take their own line. */
+.headline-stack span {
+  display: block;
+}
+
+/* Section headline: kept to a comfortable measure so long titles break
+   into two or three balanced lines rather than one very wide one. */
+.section__title {
+  max-width: 17ch;
+}
+
+.section__title--wide {
+  max-width: 22ch;
+}
+
+/* --- Large statement ---------------------------------------------------- */
+.statement {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: 1.24;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+}
+
+/* --- Utility ------------------------------------------------------------ */
+.stack-s > * + * {
+  margin-top: var(--space-s);
+}
+.stack-m > * + * {
+  margin-top: var(--space-m);
+}
+.stack-l > * + * {
+  margin-top: var(--space-l);
+}
+.stack-xl > * + * {
+  margin-top: var(--space-xl);
+}

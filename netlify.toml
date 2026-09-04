@@ -1,0 +1,9 @@
+# Netlify configuration for the Venturewright static export.
+[build]
+  command = "npm run build"
+  publish = "out"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Header rules live in public/_headers so Netlify and Cloudflare Pages share them.
