@@ -146,9 +146,11 @@ the deployment target to the build:
 All three are optional and unset by default, so a plain `npm run build`
 produces the production-domain build. See [`src/lib/site.ts`](src/lib/site.ts).
 
-If the first workflow run cannot turn Pages on by itself, enable it once under
-**Settings → Pages → Build and deployment → Source: GitHub Actions**, then
-re-run the workflow.
+**One-time setup:** enable Pages under
+**Settings → Pages → Build and deployment → Source: GitHub Actions**. The
+workflow token is not permitted to turn Pages on by itself, so until this is
+done the run builds successfully and then fails at the deploy step. Once it is
+set, every push publishes automatically.
 
 To reproduce the Pages build locally:
 

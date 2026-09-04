@@ -5,6 +5,12 @@
 # will live via NEXT_PUBLIC_BASE_PATH and NEXT_PUBLIC_SITE_ORIGIN, and marked
 # noindex so the preview never competes with venturewrightco.com in search.
 #
+# ONE-TIME SETUP
+#   Enable Pages once under Settings -> Pages -> Build and deployment ->
+#   Source: GitHub Actions. The workflow token is not permitted to turn Pages
+#   on by itself, so the first run fails at "Deploy to GitHub Pages" until this
+#   is done. Everything after that is automatic.
+#
 # MOVING TO venturewrightco.com
 #   Option A — keep GitHub Pages: add the custom domain under
 #   Settings -> Pages, then set BASE_PATH below to "" and NOINDEX to "false",
@@ -45,13 +51,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Configure Pages
-        id: pages
-        uses: actions/configure-pages@v5
-        with:
-          # Turns Pages on for the repository the first time this runs.
-          enablement: true
 
       - name: Lint and typecheck
         run: |
