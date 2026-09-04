@@ -18,10 +18,43 @@ export const EMAIL = "Matthew@venturewrightco.com";
 export const BOOKING_URL =
   "https://calendly.com/matthew-venturewrightco/new-meeting";
 
+/** The final production domain. This is the brand's address, always. */
 export const DOMAIN = "https://venturewrightco.com";
 
 /** Domain without protocol — used for display in the footer. */
 export const DOMAIN_DISPLAY = "venturewrightco.com";
+
+/* ---------------------------------------------------------------------------
+ * WHERE THIS BUILD IS BEING SERVED FROM
+ * ---------------------------------------------------------------------------
+ * The site normally lives at DOMAIN, and these three values need no attention.
+ * They exist so the same codebase can also be published to a preview host that
+ * serves the site from somewhere else — GitHub Pages, for example, which serves
+ * a project site under a sub-path such as /Venturewright.
+ *
+ * Set at build time; all three are optional:
+ *
+ *   NEXT_PUBLIC_SITE_ORIGIN   scheme + host, no trailing slash
+ *                             e.g. https://khouryai.github.io
+ *   NEXT_PUBLIC_BASE_PATH     sub-path the site is served from, leading slash
+ *                             e.g. /Venturewright
+ *   NEXT_PUBLIC_NOINDEX       "true" to ask search engines not to index this
+ *                             build — used for preview deployments so they do
+ *                             not compete with the real domain
+ *
+ * To move to the production domain, drop all three. Nothing else changes.
+ * ------------------------------------------------------------------------- */
+
+/** Sub-path this build is served from; empty when served at the root. */
+export const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+/** Absolute base URL of this particular deployment. */
+export const SITE_URL =
+  (process.env.NEXT_PUBLIC_SITE_ORIGIN ?? DOMAIN).replace(/\/+$/, "") +
+  BASE_PATH;
+
+/** True for preview deployments, which should stay out of search results. */
+export const NOINDEX = process.env.NEXT_PUBLIC_NOINDEX === "true";
 
 /** `mailto:` href derived from EMAIL so the address is never duplicated. */
 export const EMAIL_HREF = `mailto:${EMAIL}` as const;
@@ -45,8 +78,8 @@ export const SEO = {
   title: `${COMPANY_NAME} | ${CATEGORY}`,
   description:
     "Venturewright helps founder-led businesses identify their highest-leverage constraint or opportunity, architect the solution, and turn it into measurable business reality.",
-  canonical: DOMAIN,
-  ogImage: `${DOMAIN}/og.png`,
+  canonical: `${SITE_URL}/`,
+  ogImage: `${SITE_URL}/og.png`,
   ogImageAlt: `${COMPANY_NAME} — ${CATEGORY}`,
 } as const;
 

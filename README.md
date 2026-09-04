@@ -89,6 +89,8 @@ src/styles/
 ## Project structure
 
 ```
+.github/workflows/
+  deploy-pages.yml  builds and publishes to GitHub Pages on every push
 src/
   app/
     layout.tsx        <html>, fonts, metadata, structured data, header + footer
@@ -125,15 +127,71 @@ Everything else is server-rendered at build time.
 
 The build produces a plain static site in `out/`. Any static host works.
 
-### Recommended: Vercel
+### Live now: GitHub Pages (interim)
 
-1. Push this repository to GitHub.
-2. Go to <https://vercel.com/new> and import the repository.
-3. Vercel detects Next.js automatically. Confirm:
+`.github/workflows/deploy-pages.yml` builds and publishes the site on every
+push to the default branch.
+
+**URL:** <https://khouryai.github.io/Venturewright/>
+
+A GitHub Pages *project* site is served from a sub-path, so the workflow passes
+the deployment target to the build:
+
+| Variable | Value in the Pages build | Purpose |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SITE_ORIGIN` | `https://khouryai.github.io` | scheme + host |
+| `NEXT_PUBLIC_BASE_PATH` | `/Venturewright` | sub-path (sets `basePath`, prefixes every asset and link) |
+| `NEXT_PUBLIC_NOINDEX` | `true` | keeps the preview out of search results |
+
+All three are optional and unset by default, so a plain `npm run build`
+produces the production-domain build. See [`src/lib/site.ts`](src/lib/site.ts).
+
+If the first workflow run cannot turn Pages on by itself, enable it once under
+**Settings → Pages → Build and deployment → Source: GitHub Actions**, then
+re-run the workflow.
+
+To reproduce the Pages build locally:
+
+```bash
+NEXT_PUBLIC_SITE_ORIGIN=https://khouryai.github.io \
+NEXT_PUBLIC_BASE_PATH=/Venturewright \
+NEXT_PUBLIC_NOINDEX=true \
+npm run build
+```
+
+### Migrating to venturewrightco.com
+
+**Option A — stay on GitHub Pages.** Add the domain under Settings → Pages
+(this writes a `CNAME` file), add the DNS records below, then edit the `Build`
+step of the workflow: set `NEXT_PUBLIC_BASE_PATH` to `""`,
+`NEXT_PUBLIC_SITE_ORIGIN` to `https://venturewrightco.com`, and
+`NEXT_PUBLIC_NOINDEX` to `"false"`. A Pages site on a custom domain is served
+from the root, so the sub-path must be removed or every asset will 404.
+
+GitHub Pages apex + `www` records:
+
+| Type | Name | Value |
+| --- | --- | --- |
+| `A` | `@` | `185.199.108.153` |
+| `A` | `@` | `185.199.109.153` |
+| `A` | `@` | `185.199.110.153` |
+| `A` | `@` | `185.199.111.153` |
+| `CNAME` | `www` | `khouryai.github.io` |
+
+Then tick **Enforce HTTPS** once the certificate is issued.
+
+**Option B — move to Vercel, Cloudflare Pages or Netlify.** Delete
+`.github/workflows/deploy-pages.yml` and follow one of the sections below.
+Those hosts serve from the root, so none of the three variables are needed.
+
+### Vercel
+
+1. Go to <https://vercel.com/new> and import this repository.
+2. Vercel detects Next.js automatically. Confirm:
    * Build command: `npm run build`
    * Output directory: `out`
    * Node version: 22
-4. Deploy. No environment variables are needed.
+3. Deploy. No environment variables are needed.
 
 `vercel.json` sets the security and caching headers.
 
@@ -155,14 +213,15 @@ Import the repository; `netlify.toml` already sets the build command
 ### Anywhere else
 
 `npm run build`, then upload the contents of `out/` to any static host or CDN
-(S3 + CloudFront, GitHub Pages, nginx, and so on).
+(S3 + CloudFront, nginx, and so on).
 
 ---
 
-## Connecting venturewrightco.com
+## Connecting venturewrightco.com on another host
 
-After the first deploy, add the domain in the host's dashboard, then create the
-DNS records at whichever registrar holds `venturewrightco.com`.
+For GitHub Pages, see *Migrating to venturewrightco.com* above. If you move to
+one of the hosts below instead, add the domain in that host's dashboard, then
+create the DNS records at whichever registrar holds `venturewrightco.com`.
 
 **Vercel** — Project → Settings → Domains → add `venturewrightco.com` and
 `www.venturewrightco.com`, then:

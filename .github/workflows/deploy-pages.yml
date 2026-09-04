@@ -1,0 +1,84 @@
+# Builds the static site and publishes it to GitHub Pages.
+#
+# This is the interim host. A GitHub Pages project site is served from a
+# sub-path (https://<owner>.github.io/<repo>/), so the build is told where it
+# will live via NEXT_PUBLIC_BASE_PATH and NEXT_PUBLIC_SITE_ORIGIN, and marked
+# noindex so the preview never competes with venturewrightco.com in search.
+#
+# MOVING TO venturewrightco.com
+#   Option A — keep GitHub Pages: add the custom domain under
+#   Settings -> Pages, then set BASE_PATH below to "" and NOINDEX to "false",
+#   and set SITE_ORIGIN to https://venturewrightco.com. A Pages site on a
+#   custom domain is served from the root, so the sub-path must go.
+#   Option B — move to Vercel/Cloudflare/Netlify: delete this workflow. Those
+#   hosts serve from the root and need none of these variables.
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - claude/venturewright-website-yr0lw9
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a running deploy finish rather than cancelling it midway.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
+        with:
+          # Turns Pages on for the repository the first time this runs.
+          enablement: true
+
+      - name: Lint and typecheck
+        run: |
+          npm run lint
+          npm run typecheck
+
+      - name: Build
+        env:
+          # Derived from the repository so a rename does not break the paths.
+          NEXT_PUBLIC_SITE_ORIGIN: https://${{ github.repository_owner }}.github.io
+          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+          NEXT_PUBLIC_NOINDEX: "true"
+        run: npm run build
+
+      - name: Bypass Jekyll
+        run: touch out/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

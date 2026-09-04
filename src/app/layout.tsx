@@ -2,7 +2,14 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Newsreader } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { COMPANY_NAME, DOMAIN, EMAIL, FOUNDER_NAME, SEO, CATEGORY } from "@/lib/site";
+import {
+  CATEGORY,
+  COMPANY_NAME,
+  EMAIL,
+  FOUNDER_NAME,
+  SEO,
+  SITE_URL,
+} from "@/lib/site";
 import "./globals.css";
 
 /**
@@ -25,23 +32,23 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(DOMAIN),
+  metadataBase: new URL(SITE_URL),
   title: SEO.title,
   description: SEO.description,
   applicationName: COMPANY_NAME,
-  authors: [{ name: COMPANY_NAME, url: DOMAIN }],
+  authors: [{ name: COMPANY_NAME, url: SITE_URL }],
   creator: COMPANY_NAME,
   publisher: COMPANY_NAME,
   openGraph: {
     type: "website",
-    url: DOMAIN,
+    url: SEO.canonical,
     siteName: COMPANY_NAME,
     title: SEO.title,
     description: SEO.description,
     locale: "en_US",
     images: [
       {
-        url: "/og.png",
+        url: SEO.ogImage,
         width: 1200,
         height: 630,
         alt: SEO.ogImageAlt,
@@ -52,7 +59,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: SEO.title,
     description: SEO.description,
-    images: ["/og.png"],
+    images: [SEO.ogImage],
   },
   category: CATEGORY,
 };
@@ -69,9 +76,9 @@ const structuredData = {
   name: COMPANY_NAME,
   alternateName: `${COMPANY_NAME} ${CATEGORY}`,
   description: SEO.description,
-  url: DOMAIN,
+  url: SEO.canonical,
   email: EMAIL,
-  image: `${DOMAIN}/og.png`,
+  image: SEO.ogImage,
   founder: { "@type": "Person", name: FOUNDER_NAME },
   address: { "@type": "PostalAddress", addressCountry: "PR" },
   serviceType: CATEGORY,

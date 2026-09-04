@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NOINDEX, SEO } from "@/lib/site";
 import { Hero } from "@/components/sections/Hero";
 import { Problem } from "@/components/sections/Problem";
 import { Pillars } from "@/components/sections/Pillars";
@@ -18,12 +19,14 @@ import { FinalCta } from "@/components/sections/FinalCta";
  * rather than in the layout so they are not inherited by the 404 route.
  */
 export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large" },
-  },
+  alternates: { canonical: SEO.canonical },
+  robots: NOINDEX
+    ? { index: false, follow: false }
+    : {
+        index: true,
+        follow: true,
+        googleBot: { index: true, follow: true, "max-image-preview": "large" },
+      },
 };
 
 export default function HomePage() {
